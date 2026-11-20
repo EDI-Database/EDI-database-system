@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Employee Information Management System</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div id="loginView" class="login-shell">
+    <section class="login-card">
+      <div class="brand-mark">E</div>
+      <p class="eyebrow">EMPLOYEE PORTAL</p>
+      <h1>Welcome back</h1><p class="muted">Sign in to access employee records.</p>
+      <form id="loginForm">
+        <label>Email address<input id="loginEmail" type="email" required autocomplete="username" placeholder="you@company.com"></label>
+        <label>Password<input id="loginPassword" type="password" required autocomplete="current-password" placeholder="Enter your password"></label>
+        <button class="primary full" type="submit">Sign in</button>
+        <p id="loginError" class="error" role="alert"></p>
+      </form>
+      <p class="fineprint">Accounts are created by the Super Admin. Public registration is disabled.</p>
+    </section>
+  </div>
+
+  <div id="appView" class="app hidden">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark small">E</div><div><b>PeopleDesk</b><small>Employee Records</small></div></div>
+      <nav><a class="nav-active" href="#"><span>▦</span> Employee Directory</a><a id="usersNav" href="#" class="hidden"><span>♙</span> User Management</a></nav>
+      <div class="sidebar-bottom"><div class="user-chip"><div class="avatar-initial">U</div><div><b id="currentUser">User</b><small id="currentRole">Viewer</small></div></div><button id="logoutBtn" class="logout">↪ Sign out</button></div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><div><p class="eyebrow">WORKSPACE</p><h1>Employee Directory</h1></div><div class="top-actions"><span id="rolePill" class="role-pill">VIEWER</span><span class="secure">● Secure workspace</span></div></header>
+      <section class="toolbar"><div class="search-wrap"><span>⌕</span><input id="searchInput" placeholder="Search by employee name or ID..." type="search"></div><button id="addEmployeeBtn" class="primary hidden">＋ Add Employee</button></section>
+      <section class="stats"><article><small>Total employees</small><strong id="totalCount">0</strong><span>Records in directory</span></article><article><small>Active employees</small><strong id="activeCount">0</strong><span>Currently employed</span></article><article><small>Inactive employees</small><strong id="inactiveCount">0</strong><span>Not currently active</span></article></section>
+      <section class="directory-panel"><div class="panel-heading"><div><h2>Employee records</h2><p class="muted">Select an employee to view their complete profile.</p></div><span id="resultCount" class="muted"></span></div><div id="employeeList" class="employee-list"><div class="empty">Sign in to load employee records.</div></div></section>
+    </main>
+  </div>
+
+  <div id="profileModal" class="modal hidden"><div class="modal-card profile-card"><button class="close" data-close="profileModal">×</button><div id="profileContent"></div></div></div>
+  <div id="employeeModal" class="modal hidden"><div class="modal-card form-card"><button class="close" data-close="employeeModal">×</button><h2 id="employeeFormTitle">Add employee</h2><p class="muted">Complete the employee record below.</p>
+    <form id="employeeForm">
+      <input type="hidden" id="employeeId">
+      <div class="form-section"><h3>Personal information</h3><div class="form-grid">
+        <label>Employee ID<input id="employeeCode" required></label><label>Full name<input id="fullName" required></label>
+        <label>Gender<select id="gender"><option value="">Select</option><option>Female</option><option>Male</option><option>Prefer not to say</option></select></label><label>Date of birth<input id="dob" type="date"></label>
+        <label class="span-2">Address<input id="address"></label><label>Email address<input id="email" type="email"></label><label>Photo URL<input id="photoUrl" type="url" placeholder="https://..."></label>
+      </div></div>
+      <div class="form-section"><h3>Emergency contact</h3><div class="form-grid">
+        <label>Contact name<input id="emergencyName"></label><label>Contact number<input id="emergencyPhone"></label><label class="span-2">Address<input id="emergencyAddress"></label><label>Relationship<input id="emergencyRelationship"></label>
+      </div></div>
+      <div class="form-section"><h3>Employment details</h3><div class="form-grid">
+        <label>Job title<input id="jobTitle"></label><label>Employee status<select id="employeeStatus"><option value="">Select</option><option>Regular</option><option>Probationary</option><option>Contractual</option><option>Project-based</option><option>Part-time</option><option>Resigned</option><option>Separated</option></select></label>
+        <label>Date hired<input id="dateHired" type="date"></label><label>Job level / rank<input id="jobLevel"></label>
+      </div></div>
+      <div class="form-section"><h3>Compensation & payroll</h3><div class="form-grid">
+        <label>Basic salary (monthly)<input id="basicSalary" type="number" min="0" step="0.01"></label><label>De minimis benefits (monthly)<input id="deMinimis" type="number" min="0" step="0.01"></label>
+        <label>Total monthly salary <input id="totalSalary" readonly placeholder="Calculated automatically"></label>
+      </div></div>
+      <div class="form-section"><h3>Government benefits</h3><div class="form-grid">
+        <label>SSS number<input id="sssNumber"></label><label>PhilHealth number<input id="philhealthNumber"></label><label>Pag-IBIG number<input id="pagibigNumber"></label><label>TIN number<input id="tinNumber"></label>
+      </div></div>
+      <div class="form-actions"><button type="button" class="secondary" data-close="employeeModal">Cancel</button><button class="primary" type="submit">Save employee</button></div><p id="employeeError" class="error"></p>
+    </form>
+  </div></div>
+
+  <div id="usersModal" class="modal hidden"><div class="modal-card user-form-card"><button class="close" data-close="usersModal">×</button><h2>Create user account</h2><p class="muted">Only the Super Admin can create accounts. New accounts have view-only access.</p>
+    <form id="userForm"><label>Full name<input id="newUserName" required></label><label>Email address<input id="newUserEmail" type="email" required></label><label>Temporary password<input id="newUserPassword" type="password" minlength="10" required placeholder="At least 10 characters"></label><button class="primary full" type="submit">Create viewer account</button><p id="userError" class="error"></p><p id="userSuccess" class="success"></p></form>
+  </div></div>
+  <script src="app.js"></script>
+</body></html>
