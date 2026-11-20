@@ -1,6 +1,6 @@
 
 // Configure these two values from your Supabase project settings.
-const SUPABASE_URL = "https://ahogiwvyjrekpzlgxljl.supabase.co/rest/v1/";
+const SUPABASE_URL = "https://ahogiwvyjrekpzlgxljl.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_YdFsi7wGUMt5a4eAovuScA_Dm-bYzGc";
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
