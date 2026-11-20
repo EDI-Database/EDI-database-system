@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Employee Information Management System</title>
+  <title>EDI Database Management System</title>
+  <link rel="icon" type="image/png" href="icon logo.png">
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <div id="loginView" class="login-shell">
     <section class="login-card">
-      <div class="brand-mark">E</div>
+      <img class="brand-logo login-logo" src="edi logo.png" alt="Company logo">
       <p class="eyebrow">EMPLOYEE PORTAL</p>
       <h1>Welcome back</h1><p class="muted">Sign in to access employee records.</p>
       <form id="loginForm">
@@ -24,7 +25,7 @@
 
   <div id="appView" class="app hidden">
     <aside class="sidebar">
-      <div class="brand"><div class="brand-mark small">E</div><div><b>PeopleDesk</b><small>Employee Records</small></div></div>
+      <div class="brand"><img class="brand-logo small" src="loog.jpeg" alt="Company logo"><div><b>Database</b><small>Employee Records</small></div></div>
       <nav><a class="nav-active" href="#"><span>▦</span> Employee Directory</a><a id="usersNav" href="#" class="hidden"><span>♙</span> User Management</a></nav>
       <div class="sidebar-bottom"><div class="user-chip"><div class="avatar-initial">U</div><div><b id="currentUser">User</b><small id="currentRole">Viewer</small></div></div><button id="logoutBtn" class="logout">↪ Sign out</button></div>
     </aside>
